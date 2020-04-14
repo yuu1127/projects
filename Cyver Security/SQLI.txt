@@ -1,0 +1,21 @@
+SQL Injection command
+
+
+if (isset($_POST['session_id'])) {
+    $query = "SELECT * FROM secrets WHERE session_id = '" . $_POST['session_id'] . "'";
+    $result = $conn->query($query);
+} else {
+    $query = "SELECT * FROM secrets WHERE session_id = '" . session_id() . "'";
+    $result = $conn->query($query);
+}
+
+using 1 = 1 is always true
+
+x' or '1'='1 ---> return everything
+
+
+$query = "SELECT username FROM users where username = '" . $_POST['username'] . "' and password = ?";
+
+a' or 1 = 1 -- 
+
+-- comment out !!! useful!!!

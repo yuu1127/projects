@@ -1,0 +1,28 @@
+Buffer Overflow tips ;;;
+
+python3  -c "import sys;sys.stdout.buffer.write(b'aaaaa....\x06\x....')" | ./a.out
+で動く
+gets is dangerous just read top of stack
+buffer[64]
+64*a + address
+C buf[5] 4 data + NULL terminator
+
+
+Why bufferoverfolow happen !!??
+
+well, caz we need buffer for write(or read) some in memory but
+if not buffer allowcated they can occur segmantion fault 
+but if there are othre buffer beyond one buffer 
+they can over write overflow
+
+This is buffer overflow 
+buffer1↓
+buffer2
+
+if this 
+buffer1↓
+other memory segment
+
+segmention fault  !!!
+
+Oh_Look_Youre_So_1337_now

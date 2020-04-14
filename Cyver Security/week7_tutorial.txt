@@ -1,0 +1,20 @@
+Think about and list - what sorts of cyber related attacks might we suffer?  
+What does this change in daily operations mean for cyber security
+
+Asset
+our mind , mental
+our lifestyle
+money - credit card
+our inforamtion ( address , occupation)
+
+Risk(attack)
+Dos attack (too much information)
+fake news
+phishing ( register website or purchase not necessary things)
+fake website
+impostor scam
+physical attack (theft)
+
+advice how mitigate ? suggestion
+
+xor == symmetric key
