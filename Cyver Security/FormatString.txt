@@ -1,8 +1,0 @@
-useful technique
-
-python -c \'print \x38\x85... (address) %14$s' | ./a.out (14th stack memory)
-python3 -c "import sys;sys.stdout.buffer.write(b' same as above' )' | ./a.out
-
-type
-AAAA%p%p%p%p%p%p%p%p%p%p%p%p%p%p%p
-to show where is target in stack

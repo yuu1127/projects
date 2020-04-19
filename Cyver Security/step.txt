@@ -1,8 +1,0 @@
-Awesome Project Video
-
-Step1
-show tool 
-Step2
-show debug using tool
-Step3
-show crackme result
