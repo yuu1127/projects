@@ -1,0 +1,41 @@
+check commnet first !!!
+
+gdb
+GDB command
+gdb file name
+disas main
+... disassmble main functon
+breakpoint<br />
+run
+b *main
+b *address
+continue
+continue
+
+0x------   memory address
+push a ... put a on stack 
+mov a b ... insert b to a
+cmp a, b ... compare a, b (a - b == 0 flag = 1)
+lea a, b ... insert b into a
+call f1(0x... address) ... call(jump and return) f1 function
+jmp f1 ... no return just jump
+
+There are sixteen 64-bit registers in x86-64: 
+%rax, %rbx, %rcx, %rdx, %rdi, %rsi, %rbp,%rsp, and %r8-r15. 
+eax ... Accumlator (x84 == 32bit ax is half of eax)
+esp ... Stack Pointer
+
+
+test a a if 
+example:
+; Conditional Jump
+test cl, cl   ; set ZF to 1 if cl == 0
+je 0x804f430  ; jump if ZF == 1
+
+; Conditional Jump with NOT
+test cl, cl   ; set ZF to 1 if cl == 0
+jne 0x804f430  ; jump if ZF != 1
+
+; or
+test eax, eax  ; set SF to 1 if eax < 0 (negative)
+js error ; jump if SF == 1
