@@ -1,0 +1,30 @@
+#!/bin/dash
+
+argv=$1
+directory_name="shrug"
+index_name="index"
+repository_name="shrug-number"
+commit_number=$(echo $argv| cut -d ':' -f1)
+file_name=$(echo $argv| cut -d ':' -f2)
+
+if test ! -e .$directory_name/$repository_name/$directory_name-$commit_number && test ! $commit_number = ""
+then
+    echo "$0: error: unknown commit '$commit_number'"
+    exit 1
+fi
+
+# if commit is omitted, print filename in index
+if test -e .$directory_name/$repository_name/$directory_name-$commit_number
+then
+    if test ! -e .$directory_name/$repository_name/$directory_name-$commit_number/$file_name
+    then
+        echo "$0: error: '$file_name' not found in commit $commit_number"
+        exit 1
+    fi
+    cat .$directory_name/$repository_name/$directory_name-$commit_number/$file_name
+elif test -e .$directory_name/$index_name/$file_name
+then
+    cat .$directory_name/$index_name/$file_name
+else
+    echo "$0: error: '$file_name' not found in index"
+fi

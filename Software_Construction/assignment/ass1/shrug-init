@@ -1,0 +1,22 @@
+#!/bin/dash
+
+directory_name="shrug"
+index_name="index"
+log_name='log'
+latest_name='latest_commit'
+repository_name="shrug-number"
+stage_name="stage"
+
+
+if test -e .$directory_name
+then
+	echo "$0: error: .$directory_name already exists"
+	exit 1
+fi
+mkdir .$directory_name
+mkdir ./.$directory_name/$index_name
+mkdir ./.$directory_name/$repository_name
+mkdir ./.$directory_name/$stage_name
+touch ./.$directory_name/$log_name
+echo "Initialized empty shrug repository in .shrug"
+

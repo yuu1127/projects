@@ -1,0 +1,33 @@
+#!/bin/dash
+
+directory_name="shrug"
+index_name="index"
+stage_name="stage"
+
+if test ! -e .$directory_name
+then
+	echo "$0: error: no .$directory_name directory containing $directory_name repository exists"
+	exit 1
+fi
+
+for file in "$@"
+do
+	if test ! -e $file
+	then
+		if test -e ./.$directory_name/$index_name/$file
+		then
+			# important point if file in index not exist in current directory, then need to remove it
+			cp ./.$directory_name/$index_name/$file ./.$directory_name/$stage_name
+			rm ./.$directory_name/$index_name/$file
+			continue
+		else
+			echo "$0: error: can not open 'non_existent_file'"
+			exit 1
+		fi
+	fi
+	# I save file in stage directory as well for future implemention
+	# since files in index would not removed after commit
+	# but soemtimes we don't wnat to know the past files added before
+	cp $file ./.$directory_name/$index_name
+	cp ./.$directory_name/$index_name/$file ./.$directory_name/$stage_name
+done

@@ -1,0 +1,6 @@
+#!/bin/dash
+
+directory_name="shrug"
+log_name='log'
+
+tac .$directory_name/$log_name

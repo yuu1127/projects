@@ -1,0 +1,135 @@
+#!/bin/dash
+
+directory_name="shrug"
+number=0
+new_directory="${directory_name}-${number}"
+index_name="index"
+log_name='log'
+latest_name='latest_commit'
+repository_name="shrug-number"
+stage_name="stage"
+eflag=0
+option_a=0
+option_m=0
+
+# commit is occured when some file is different
+# when the files stored in your index are the same as your latest commit.
+
+# deal with option
+for option in "$@"
+do
+    if echo $option | egrep "^-" >/dev/null
+    then
+        if test $option = "-m"
+        then
+            option_m=1
+        elif test $option = "-a"
+        then
+            option_a=1
+        fi
+    else
+        message=$option
+    fi
+done
+
+# for a option
+if test $option_a -eq 1
+then
+    for filename in *
+    do
+        if test -e ./.$directory_name/$index_name/$filename
+        then
+            cp $filename ./.$directory_name/$index_name
+        fi
+    done
+fi
+
+# get latest repository shrug-number 
+while test -e ".$directory_name/$repository_name/$new_directory"
+do
+	number=$(($number + 1))
+	new_directory="${directory_name}-${number}"
+done
+latest_repo_n=$(($number - 1))
+
+# eflag is used to decide nothing to commmit (if 0 nothing to commit)
+# special case, if some file in stage and this file not in index
+# means it did shrug add before to remove file in index
+# so need to commit
+if test ! -z "$(ls -A .$directory_name/$stage_name)"
+then
+    for stage_file in .$directory_name/$stage_name/*
+    do
+        file=$(echo $stage_file|cut -d '/' -f3)
+        if test ! -e .$directory_name/$index_name/$file
+        then
+            eflag=1
+            break
+        fi
+    done
+fi
+
+# check files is changed between index and latest repository
+if test $number -ne 0
+then
+    for filename1 in .$directory_name/$index_name/*
+    do
+        file1=$(echo $filename1|cut -d '/' -f3)
+        if test ! -e ".$directory_name/$repository_name/$directory_name-$latest_repo_n/$file1"
+        then
+            eflag=1
+            break
+        fi
+        for filename2 in .$directory_name/$repository_name/$directory_name-$latest_repo_n/*
+        do
+            file2=$(echo $filename2|cut -d '/' -f4)
+            test "$file1" != "$file2" && continue
+            if test ! -e ".$directory_name/$index_name/$file2"
+            then
+                eflag=1
+                break 2
+            fi
+
+            if ! diff "$filename1" "$filename2" >/dev/null
+            then
+                eflag=1
+                break 2
+            fi
+        done
+    done
+    if test $eflag -eq 0
+    then
+        echo "nothing to commit"
+        exit 1
+    fi
+fi
+
+# special case, empty index and empty latest repository then nothing to commit
+if test -z "$(ls -A .$directory_name/$stage_name)"
+then
+    if test -z "$(ls -A .$directory_name/$repository_name/$directory_name-$latest_repo_n)"
+    then
+        echo "nothing to commit"
+        exit 1
+    fi
+fi
+
+
+# commit process and write log for shrug-log
+mkdir .$directory_name/$repository_name/$new_directory
+echo "$number $message" > .$directory_name/$latest_name
+echo "$number $message" >> .$directory_name/$log_name
+echo "Committed as commit $number"
+if test ! -z "$(ls -A .$directory_name/$index_name)"
+then
+    for file in .$directory_name/$index_name/*
+    do
+        cp $file ".$directory_name/$repository_name/$new_directory"
+    done
+fi
+
+# remove no need stage files
+if test ! -z "$(ls -A .$directory_name/$stage_name)"
+then
+    rm ./.$directory_name/$stage_name/*
+fi

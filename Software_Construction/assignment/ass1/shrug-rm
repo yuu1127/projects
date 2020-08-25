@@ -1,0 +1,107 @@
+#!/bin/dash
+
+directory_name="shrug"
+index_name="index"
+stage_name="stage"
+repository_name="shrug-number"
+number=0
+latest_directory="${directory_name}-${number}"
+option_c=0
+option_f=0
+
+# get latest repository number
+while test -e .$directory_name/$repository_name/$latest_directory
+do
+    number=$(($number + 1))
+    latest_directory="${directory_name}-${number}"
+done
+number=$(($number - 1))
+latest_directory="${directory_name}-${number}"
+
+# do process for each option
+for option in $@
+do
+    # if option has --
+    if echo $option | egrep "^--" >/dev/null
+    then
+        if test $option = "--cached"
+        then
+            option_c=1
+        elif test $option = "--force"
+        then
+            option_f=1
+        fi
+    else
+        # filenames process
+        filename=$option
+        if test ! -e ./.$directory_name/$index_name/$filename
+        then
+            echo "$0: error: '$filename' is not in the shrug repository"
+            exit 1
+        fi
+        # force option
+        if test $option_f -eq 1
+        then
+            rm ./.$directory_name/$index_name/$filename
+            if test -e $filename && test ! $option_c -eq 1
+            then
+                rm $filename
+            fi
+        # cached option
+        elif test $option_c -eq 1
+        then
+            # file different from index and current directory
+            if ! diff "./.$directory_name/$index_name/$filename" "$filename" >/dev/null
+            then
+                # file different from current directory and latest repo
+                if ! diff "./.$directory_name/$index_name/$filename" "./.$directory_name/$repository_name/$latest_directory/$filename" >/dev/null
+                then
+                    echo "$0: error: '$filename' in index is different to both working file and repository"
+                    exit 1
+                else
+                    rm ./.$directory_name/$index_name/$filename
+                fi
+            else
+                rm ./.$directory_name/$index_name/$filename
+            fi
+        # no option
+        else
+            if test -e ./.$directory_name/$stage_name/$filename
+            then
+                if ! diff "./.$directory_name/$index_name/$filename" "$filename" >/dev/null
+                then
+                # different from current and latest repo
+                    if ! diff "./.$directory_name/$index_name/$filename" "./.$directory_name/$repository_name/$latest_directory/$filename" >/dev/null
+                    then
+                        echo "$0: error: '$filename' in index is different to both working file and repository"
+                        exit 1
+                    fi
+                fi
+                echo "$0: error: '$filename' has changes staged in the index"
+                exit 1
+            fi
+            if ! diff "./.$directory_name/$repository_name/$latest_directory/$filename" "$filename" >/dev/null
+            then
+                echo "$0: error: '$filename' in repository is different to working file"
+                exit 1
+            elif ! diff "./.$directory_name/$index_name/$filename" "$filename" >/dev/null
+            then
+                # different from current and latest repo
+                if ! diff "./.$directory_name/$index_name/$filename" "./.$directory_name/$repository_name/$latest_directory/$filename" >/dev/null
+                then
+                    echo "$0: error: '$filename' in index is different to both working file and repository"
+                    exit 1
+                else
+                    echo "$0: error: '$filename' in index is different to working file"
+                    exit 1
+                fi
+            else
+                rm ./.$directory_name/$index_name/$filename
+                if test -e $filename
+                then
+                    rm $filename
+                fi
+            fi
+        fi
+    fi
+done

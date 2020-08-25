@@ -1,0 +1,115 @@
+#!/bin/dash
+
+directory_name="shrug"
+index_name="index"
+stage_name="stage"
+repository_name="shrug-number"
+number=0
+latest_directory="${directory_name}-${number}"
+option_c=0
+option_f=0
+
+# get latest repository number
+while test -e .$directory_name/$repository_name/$latest_directory
+do
+    number=$(($number + 1))
+    latest_directory="${directory_name}-${number}"
+done
+number=$(($number - 1))
+latest_directory="${directory_name}-${number}"
+
+# collect file name from current directory , index, latest repository
+files=""
+
+for c_file in *
+do
+    files="${files} ${c_file}"
+done
+
+for i_file in ./.$directory_name/$index_name/*
+do
+    i_file=$(echo $i_file| cut -d '/' -f4)
+    files="${files} ${i_file}"
+done
+
+for r_file in ./.$directory_name/$repository_name/$latest_directory/*
+do
+    r_file=$(echo $r_file| cut -d '/' -f5)
+    files="${files} ${r_file}"
+done
+
+all_files=$(for i in `echo $files`
+do
+    echo "$i"
+done | sort -u)
+
+# my favorite code here
+# for each consition, show different message
+# $latest directory is latest repository
+for file in $all_files
+do
+    filename=$(echo $file| cut -d '/' -f2)
+    if test "$filename" = "*"
+    then
+        continue
+    fi
+    if test -e $filename && test -e "./.$directory_name/$index_name/$filename"
+    then
+        if test -e ./.$directory_name/$repository_name/$latest_directory/$filename
+        then
+            if ! diff "./.$directory_name/$repository_name/$latest_directory/$filename" "$filename" >/dev/null
+            then
+                if test -e ./.$directory_name/$stage_name/$filename
+                then
+                    if ! diff "./.$directory_name/$stage_name/$filename" "$filename" >/dev/null
+                    then
+                        echo "$filename - file changed, different changes staged for commit"
+                        continue
+                    else
+                        echo "$filename - file changed, changes staged for commit"
+                        continue
+                    fi
+                else
+                    echo "$filename - file changed, changes not staged for commit"
+                    continue
+                fi
+            else
+                echo "$filename - same as repo"
+                continue
+            fi
+        else
+            if test -e ./.$directory_name/$stage_name/$filename
+            then
+                if ! diff "./.$directory_name/$stage_name/$filename" "$filename" >/dev/null
+                then
+                    echo "$filename - added to index, file changed"
+                else
+                    echo "$filename - added to index"
+                fi
+                continue
+            else
+                echo "$filename - untracked"
+                continue
+            fi
+        fi
+    else
+        if test -e "./.$directory_name/$index_name/$filename"
+        then
+            if test -e "./.$directory_name/$stage_name/$filename"
+            then
+                echo "$filename - added to index, file deleted"
+            else
+                echo "$filename - file deleted"
+            fi
+            continue
+        elif test -e $filename
+        then
+            echo "$filename - untracked"
+            continue
+        elif test -e "./.$directory_name/$repository_name/$latest_directory/$filename"
+        then
+            echo "$filename - deleted"
+            continue
+        fi
+    fi
+done
