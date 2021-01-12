@@ -1,0 +1,48 @@
+<!--Navbar-->
+<style>
+.navbar {
+  background: linear-gradient(to right, #396afc, #2948ff);
+}
+.navbar-brand {
+  color: white;
+}
+
+</style>
+<!-- (".navbar").css("background","linear-gradient(to right, #e43a15, #e65245)");
+$(".dropdown-menu").css("background","#e43a15"); -->
+
+<nav class="navbar navbar-expand-lg">
+    <a class="navbar-brand" href="/">FilmFinder</a>
+    <form action="/search" method="get" class="form-inline my-2 my-lg-0" >
+        <input name="q" class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+        <button class="btn btn-info my-2 my-sm-0" type="submit">Search</button>
+      </form>
+      <ul class="navbar-nav ml-auto mr-1">
+        {% if user.is_authenticated %}
+        <li class="nav-item col-md-auto">
+          <a class="btn btn-warning" href="/accounts/wishlist/{{user.username}}" role="button">Your Wishlist</a>
+        </li>
+        <li class="nav-item col-md-auto">
+          <a class="btn btn-danger" href="/accounts/blocklist/{{user.username}}" role="button">Your Blocklist</a>
+        </li>
+        <div class="col-md-auto">
+          <button class="btn btn-success dropdown-toggle" type="button" id="navbarDropdown"
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Your account
+          </button>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a href="/accounts/password_change/" class="dropdown-item">Change password</a>
+            <a href="/accounts/logout" class="dropdown-item">Logout</a>
+          </div>
+        </div>
+        {% else %}
+        <li class="nav-item ml-auto mr-1">
+          <a class="btn btn-light" href="/accounts/login?next={{ request.path }}" role="button">Login</a>
+        </li>
+        <li class="nav-item ml-auto mr-1">
+          <a class="btn btn-dark" href="/accounts/register?next={{ request.path }}" role="button">Sign up</a>
+        </li>
+        {% endif %}
+      </ul>
+  </nav>
+

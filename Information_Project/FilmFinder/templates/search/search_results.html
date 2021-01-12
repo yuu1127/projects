@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+{% load search_tags %}
+{% block content %}
+{% load index_tags %}
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <h1>Your search results</h1>
+            {% if results|length > 0 %}
+            <ul class="list-group">
+                {% for movie in results %}
+                <li class="list-group-item d-flex justify-content-between align-items-center ">
+                    <div class="image-parent">
+                        <img src="{{ movie.coverUrl }}" class="img-fluid" width="90" height="135">
+                    </div>
+                    <a href="/movie/{{ movie.imdbID }}">
+                        <h3>{{ movie.title }}<h3>
+                    </a>
+                    <!-- average ratings here-->
+                    <h6>Avg rating: {% get_avg_ratings movie ban_list %}</h6>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <h6>Nothing Found</h6>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,309 @@
+{% extends "layout.html" %}
+{% block content %}
+{% load index_tags %}
+{% load crispy_forms_tags %}
+<style>
+  .list-group {
+    max-height: 800px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+</style>
+
+<div class="container h-100">
+  <br><br>
+  <div class="row">
+    <div class="col-4">
+      <img src="{{ movie.coverUrl }}" class="img-fluid" width="340" height="510">
+      <br><br>
+      <a class="btn btn-secondary" href="https://www.justwatch.com/au/search?q={{ movie.title}}" role="button">Watch it
+        now</a>
+    </div>
+
+    <div class="col">
+      <div class="row">
+        <span>
+          <h1>{{ movie.title}}</h1>
+          {{ movie.year}}
+        </span>
+      </div>
+      <div class="row">
+        <h4>Average rating:
+          <i class="fas fa-star" style="color:orangered"></i>
+          {% get_avg_ratings movie ban_list %}
+          <!-- <i class="fas fa-star-half" style="color:orangered"></i> -->
+          <!-- <i class="far fa-star" style="color:orangered"></i> -->
+        </h4>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        {% if included  and user.is_authenticated %}
+        <a href="{% url 'account:wishlist_remove' user.username movie.imdbID %}" class="btn btn-warning" role="button"><i class="fas fa-heart" style="color:red"></i> Remove from your wishlist</a>
+        {% elif user.is_authenticated %}
+        <a href="{% url 'account:wishlist_add' user.username movie.imdbID %}" class="btn btn-warning" role="button"><i class="fas fa-heart" style="color:red"></i> Add to your wishlist</a>
+        {% else %}
+        <a href="/accounts/login?next={{ request.path }}" class="btn btn-primary" role="button"><i class="fas fa-heart" style="color:red"></i> Login to add to
+          wishlist</a>
+        {% endif %}
+      </div>
+      <div class="row">
+        <h4>Genres:
+          {% for genre in movie.genres_as_list %}
+          <a href="/?genre={{ genre }}" class="badge badge-secondary">{{ genre }}</a>
+          {% endfor %}
+        </h4>
+      </div>
+      <div class="row">
+        <h4>Directors:
+          {% for director in movie.directors_as_list %}
+          <a href="/?director={{ director }}" class="badge badge-info">{{ director }}</a>
+          {% endfor %}
+        </h4>
+      </div>
+      <div class="row">
+        <p>{{ movie.plot }}</p>
+      </div>
+      <div class="row">
+        <h5>Cast: </h5>
+        <p>
+          {% for cast in  movie.cast_as_list|slice:":10" %}
+          <span class="badge badge-pill badge-info">{{ cast }}</span>
+          {% endfor %}
+          <br><br>
+          <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#full_cast"
+            aria-expanded="false" aria-controls="full_cast" id='cast_collapse'>See full cast</button>
+
+        <div class="collapse" id="full_cast">
+
+          {% for cast in  movie.cast_as_list|slice:"10:" %}
+          <span class="badge badge-pill badge-info">{{ cast }}</span>
+          {% endfor %}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br>
+  <div class="row align-items-start">
+    <div class="col-6">
+      <h4>User Reviews
+      {% if reviewed %}
+      <button type="button" class="btn btn-primary " data-toggle="collapse" data-target="#leave_review"
+      aria-expanded="false" aria-controls="leave_review" id='leave_review_collapse'>Edit your review</button></h4>
+      {% else %}
+      <button type="button" class="btn btn-primary " data-toggle="collapse" data-target="#leave_review"
+      aria-expanded="false" aria-controls="leave_review" id='leave_review_collapse'>Leave your review</button></h4>
+      {% endif %}
+      {% if not user.is_authenticated %}
+      <div class="collapse" id="leave_review">
+      <h4>You must <a href="/accounts/login?next={{ request.path }}">login</a> first in order to leave a review.</h4></div>
+      {% elif reviewed %}
+      <div class="collapse" id="leave_review">
+      <form action="{% url 'movie:edit_review' movie.imdbID %}" method="post">
+        {% csrf_token %}
+        <!-- {% crispy form %} -->
+        {{ form.as_p }}
+        <dt id='stat'><label>&#40;<span>500</span> characters left&#41;</label></dt>
+        <input type="submit" class="btn btn-primary btn-sm" name="review_save" value="Save" />
+        <input type="submit" class="btn btn-primary btn-sm" name="review_delete" value="Delete"/>
+        </form>
+      </div>
+      {% else %}
+      <div class="collapse" id="leave_review">
+      <div class="card card-body"> 
+      <form action="{% url 'movie:add_review' movie.imdbID %}" method="post">
+      {% csrf_token %}
+      <!-- {% crispy form %} -->
+      {{ form.as_p }}
+      <dt id='stat'><label>&#40;<span>500</span> characters left&#41;</label></dt>
+      <input type="submit" class="btn btn-primary btn-sm" value="Add" />
+      </form>
+    </div> 
+      </div>
+      {% endif %}
+      <br>
+      {% if asso_reviews %}
+      <div class="list-group">
+        {% for review in asso_reviews %}
+        <div class="list-group-item">
+          <div class="d-flex justify-content-between">
+            {% if review.user.username|length > 30 %}
+            <h6 data-toggle="tooltip" data-placement="top" title={{ review.user.username }}>
+              {{ review.user.username|slice:":30" }}...</h6>
+            {% else %}
+            <h6>{{ review.user.username }}</h6>
+            {% endif %}
+            <small><i class="fas fa-star" style="color:orangered"></i>{{ review.rating }}</small>
+            <small>{{ review.cDate }}</small>
+          </div>
+              <p class="mb-1" style="white-space: normal; word-break: break-all;">{{ review.review }}</p>
+              <div class="d-flex justify-content-between">
+                {% if user == review.user%}
+              <a href="{% url 'account:wishlist' review.user %}" class="badge badge-primary">See your wishlist</a>
+                {% elif not user.is_authenticated %}
+                <a href="/accounts/login?next={{ request.path }}" class="badge badge-primary">Login to see this user's wishlist</a>
+                {% else %}
+                <a href="{% url 'account:wishlist' review.user %}" class="badge badge-warning">See this user's wishlist</a>
+                {% endif %}
+                {% if user.is_authenticated and user != review.user%}
+                <a href="{% url 'account:banlist_add' user review.user %}" class="badge badge-danger">Block this user</a>
+                {% elif user.is_authenticated and user == review.user%}
+                {% else %}
+                <a href="/accounts/login?next={{ request.path }}" class="badge badge-primary">Login to block this user</a>
+                {% endif %}
+              </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <h4>No reviews are available.</h4>
+      {% endif %}
+    </div>
+    <div class="col-6">
+      <h4>Similar Movies By</h4>
+      <ul class="nav nav-pills nav-justified" id="RecommTab" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link active"  id="Genres-tab" data-toggle="tab" href="#Genres" role="tab" aria-controls="Genres" aria-selected="true">Genres</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link"  id="Directors-tab" data-toggle="tab" href="#Directors" role="tab" aria-controls="Directors" aria-selected="false">Directors</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link"  id="Casts-tab" data-toggle="tab" href="#Casts" role="tab" aria-controls="Casts" aria-selected="false">Cast</a>
+        </li>
+      {% if user.is_authenticated %}
+        <li class="nav-item">
+          <a class="nav-link"  id="Reviews-tab" data-toggle="tab" href="#Reviews" role="tab" aria-controls="Reviews" aria-selected="false">User reviews</a>
+        </li>
+        {% endif %}
+      </ul>
+      <div class="tab-content" id="RecommTabContent">
+        <div class="tab-pane fade show active" id="Genres" role="tabpanel" aria-labelledby="Genres-tab">
+          {% if similar_movies_genres %}
+          <ul class="list-group">
+            {% for movie in similar_movies_genres %}
+              <li class="list-group-item d-flex justify-content-between align-items-center ">
+                <div class="image-parent">
+                  <img src="{{ movie.coverUrl }}"  width="90" height="135">
+                </div>
+                <a href="/movie/{{ movie.imdbID }}">
+                  <p><big>{{ movie.title }}</big></p>
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
+          {% else %}
+          <h4>No similar movies to give recommendations.</h4>
+          {% endif %}
+        </div>
+        <div class="tab-pane fade" id="Directors" role="tabpanel" aria-labelledby="Directors-tab">
+          {% if similar_movies_directors %}
+          <ul class="list-group">
+            {% for movie in similar_movies_directors %}
+              <li class="list-group-item d-flex justify-content-between align-items-center ">
+                <div class="image-parent">
+                  <img src="{{ movie.coverUrl }}"  width="90" height="135">
+                </div>
+                <a href="/movie/{{ movie.imdbID }}">
+                  <p><big>{{ movie.title }}</big></p>
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
+          {% else %}
+          <h4>No similar movies to give recommendations.</h4>
+          {% endif %}
+        </div>
+        <div class="tab-pane fade" id="Casts" role="tabpanel" aria-labelledby="Casts-tab">
+          {% if similar_movies_casts %}
+          <ul class="list-group">
+            {% for movie in similar_movies_casts %}
+              <li class="list-group-item d-flex justify-content-between align-items-center ">
+                <div class="image-parent">
+                  <img src="{{ movie.coverUrl }}"  width="90" height="135">
+                </div>
+                <a href="/movie/{{ movie.imdbID }}">
+                  <p><big>{{ movie.title }}</big></p>
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
+          {% else %}
+          <h4>No similar movies to give recommendations.</h4>
+          {% endif %}
+        </div>
+        {% if user.is_authenticated %}
+        <div class="tab-pane fade" id="Reviews" role="tabpanel" aria-labelledby="Reviews-tab">
+        {% if similar_movies_reviews %}
+          <ul class="list-group">
+            {% for movie in similar_movies_reviews %}
+              <li class="list-group-item d-flex justify-content-between align-items-center ">
+                <div class="image-parent">
+                  <img src="{{ movie.coverUrl }}"  width="90" height="135">
+                </div>
+                <a href="/movie/{{ movie.imdbID }}">
+                  <p><big>{{ movie.title }}</big></p>
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
+          {% else %}
+          <h4>Not enough reviews to give recommendations.</h4>
+          {% endif %}
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    $('#cast_collapse').on('click', function () {
+      var text = $('#cast_collapse').text();
+      if (text === "See full cast") {
+        $(this).html('Hide full cast');
+      } else {
+        $(this).text('See full cast');
+      }
+    });
+  });
+</script>
+
+<script type="text/javascript">
+function countChar(val) {
+    var len = val.value.length;
+
+    if (len >= 500) {
+        val.value = val.value.substring(0, 500);
+        $('#stat span').text(0);
+    } else {
+        $('#stat span').text(500 - len);
+    }
+}
+countChar($('#id_review').get(0));
+$('#id_review').keyup(function() {
+    countChar(this);
+});
+</script>  
+
+<script type="text/javascript">
+$(function() {
+  $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+    history.pushState({}, '', e.target.hash);
+  });
+
+  var hash = document.location.hash;
+  var prefix = "tab_";
+  if (hash) {
+    $('.nav-tabs a[href="'+hash.replace(prefix,"")+'"]').tab('show');
+  }
+});
+</script>
+<script>
+  $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
+</script>
+
+
+{% endblock %}

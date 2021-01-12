@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<head>
+<style>
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Dotted border */
+hr.dotted {
+  border-top: 3px dotted #bbb;
+}
+
+</style>
+</head>
+
+<body>
+    <div class="container">
+        <ul class="list-inline">
+            {% for key,values in director_dic.items %}
+                    <h3>{{ key }}</h3>
+                    <hr class="dotted">
+                    <div class="row">
+                    {% for director in values %}
+                        <div class="col-xs-4">
+                            <li>
+                                <a href="/?director={{ director }}" class="badge badge-light">
+                                {{ director }}
+                                </a>&nbsp;
+                            </li>
+                        </div>
+                        {% if forloop.counter|divisibleby:8 %}
+                            </div>
+                            <div class="row">
+                        {% endif %}
+                    {% endfor %}
+                    </div>
+                    <hr class="dotted">
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div class="container">
+  <div class="row">
+    <div class="col">
+      {% if user.is_authenticated and selected_usr == user and users_in_banlist|length > 0 %}
+      <h1>Blocked users</h1>
+      <ul class="list-group">
+        {% for record in users_in_banlist %}
+        <li class="list-group-item d-flex align-items-center  justify-content-between"">
+          <p style="word-break: break-all;">{{ record.blockedUser.username }}</p>
+          <a href="{% url 'account:banlist_remove' user record.blockedUser.username %}"
+          class="btn btn-danger">Unblock</a>
+        </li>
+        {% endfor %}
+      </ul>
+      {% elif user.is_authenticated and selected_usr == user and users_in_banlist|length == 0 %}
+      <h1>Your blocklist is empty</h1>
+      {% else %}
+      <h1>You must login first to use blocklist.</h1>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends "layout.html" %}
+{% block content %}
+{% load index_tags %}
+
+<div class="container">
+  <div class="row">
+    <div class="col">
+      {% if user.is_authenticated and selected_usr == user and movies_in_wishlist|length > 0 %}
+      <h1>Your wishlist</h1>
+      <ul class="list-group">
+        {% for record in movies_in_wishlist %}
+        <li class="list-group-item d-flex align-items-center ">
+          <div class="image-parent flex-fill">
+            <img src="{{ record.movie.coverUrl }}" class="img-fluid" width="90" height="135">
+          </div>
+          <a class="flex-fill" href="/movie/{{ record.movie.imdbID }}">
+            <h3>{{ record.movie.title }}</h3>
+          </a>
+          <h6>Avg rating: {% get_avg_ratings record.movie ban_list %}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h6>
+          <a href="{% url 'account:wishlist_remove' user.username record.movie.imdbID %}"
+            class="btn btn-warning">Remove</a>
+        </li>
+        {% endfor %}
+      </ul>
+      {% elif user.is_authenticated and selected_usr == user and movies_in_wishlist|length == 0 %}
+      <h1>Your wishlist is empty</h1>
+      {% elif user.is_authenticated and movies_in_wishlist|length > 0 %}
+      <h1>{{ selected_usr.username }}'s wishlist</h1>
+      <ul class="list-group">
+        {% for record in movies_in_wishlist %}
+        <li class="list-group-item d-flex justify-content-between align-items-center ">
+          <div class="image-parent">
+            <img src="{{ record.movie.coverUrl }}" class="img-fluid" width="90" height="135">
+          </div>
+          <a href="/movie/{{ record.movie.imdbID }}">
+            <h3>{{ record.movie.title }}<h3>
+          </a>
+          <h6>Avg rating: {% get_avg_ratings record.movie ban_list %}</h6>
+        </li>
+        {% endfor %}
+      </ul>
+      {% elif user.is_authenticated and movies_in_wishlist|length == 0 %}
+      <h1><p style="word-break: break-all;">{{ selected_usr.username }}'s wishlist is empty.</p></h1>
+      {% else %}
+      <h1>You must login first to use wishlist.</h1>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+
+
+
+{% endblock %}

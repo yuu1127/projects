@@ -1,0 +1,6 @@
+django
+imdbpy
+django-crispy-forms
+django-allauth
+sklearn
+pandas

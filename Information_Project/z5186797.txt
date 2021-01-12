@@ -1,0 +1,109 @@
+Date	|Start|Stop|Activity						|Comments
+-------------------------------------------------------------
+20/09/20|15:30|21:30|start research for project and practice for react|
+We started comp9900 project for this term.
+This week, we met up each other and discussed which topic we want to choose.
+Seems moviefinder is relatively easier to attach for everyone so
+we will choose this topic.
+I will do front-end for this project so from last week I've study React for JavaScript.
+React is JS new library and this is famous for making web application with clear and beautiful UI.
+(if react starts , it will make basic html and css automatically.)
+Studied using this react official website,
+https://reactjs.org/tutorial/tutorial.html#what-are-we-building
+I felt a little difficult to understand render() and props for react syntax,
+but actually I found render() is just function which return html tags
+and props is just argv... for c++.
+This week, my purpose is making really simple web application (like this https://react.rocks/tag/Movies)
+for trial for react and write proposal such as user stories.
+-------------------------------------------------------------
+27/09/20|start to use Jira and design UI for proposal|
+Week2 started, we chose Moviefinder project and start to write proposal.
+Since it is recommended to use Jira so we make user stories and later
+scrum master groups them and we can attach our own tasks.
+I'm in charge of UI so use draw.io and start design UI.
+I referred these websites https://letterboxd.com/, https://codepen.io/studiojvla/full/zBQAWo,
+https://www.amazon.co.jp/, https://www.amazon.co.au/ and
+completed 75% of design.
+-------------------------------------------------------------
+03/10/20|finished design UI and start study for Django|
+Week3 started, this week I worked for mainly finishing UI design.
+For API, I met Luyuan(z5247759) and discussed about which API we should use mainly.
+We concluded that we use Django for first step since our team member all know how to
+use python and it is better to use one API for ease for everyone(not use
+React and Django both). Maybe if we have time, we can use React to make
+more functional website in week8 or 9.
+So, I stated to study Django watching this youtube video https://www.youtube.com/watch?v=ZjAMRnCu-84&start=0s
+and tutorials website https://docs.djangoproject.com/en/3.1/intro/tutorial01/.
+Maybe next week, I can make simple main website which show movie details and login page.
+-------------------------------------------------------------
+11/10/20|study Django and make simple UI|
+in Week4 our purpose is to make simple UI for demonstration for week5.
+So far, our movie database has movieID, title, genres, directors, year, CoverURL
+but we need to store plot story and casts so
+made make_small_db.py to store data (the number of movie we can assign).
+For review, maybe we can make many to many table to store UserID (primary key), MovieID or name (primary key), review contents .
+I worked to make UI but didn't use template , so just
+put for loop to show each movie, but after I saw Luyuan's UI
+his one was more beautiful so it is better to use his UI for this.
+-------------------------------------------------------------
+18/10/20|Write Code and do demo|
+in week5, we have already made simple UI and simple feature for movie finder.
+I worked on index.page and made genre filter so if user choose specific genre
+it can display only this specific genres. It is easy to make this function since
+need to edit view.py and add new select sentence for movie database
+(such as objects.filter(genres__contains=genre)).
+The a little complicated point is need to merge pagination and this function.
+So, I made query_string and pass this to html (frontend).
+We can use this feature for display be rating as well later.
+We did demo on Thursday , I think we have been doing good job for this project.
+-------------------------------------------------------------
+26/10/20|Write Code|
+in week 6 we have flexible week so we do not have lab ,
+we discussed about which point we can improve from demo and
+start write retrospectives. After that we assigned work for each member
+and I made directors page to show every directors and made
+drop down button since in last demo tutor point out a little many information on
+UI. I almost finished and now need to clean UI and display each directors align line.
+Still, it has bug which even directors has no movies to make but show all movies , need to
+fix it later.
+-------------------------------------------------------------
+03/11/20|Compose structure and Write Code for recommendation system|
+in week 7 it is close to end of this project , so after we did meeting on Monday
+we decided to attach difficult part of this projects which are recommendation system and
+user ban list. I finished my work to make browser by genre and directors and directors page
+so I started to consider component of recommendation system and write code.
+First I made recommendation system by director and this is relatively easier Since
+need to get movies which same director directed.
+For recommendation by genre, it is a bit complicated because each movie has more than
+one feature so I used count-vector and calculate similarity for each movie using genres feature.
+These recommendation systems seem work so I start to think about how to make the system
+by review history. My idea is that "if current user is user U1, and user U1 rated the current movie M1
+rating 4, Then User U2 also rated M1 a 4. Finally, U2 also rated movie M2 a 4. Hence, we recommend U1
+the movie M2". I will implement this idea in following weeks.
+-------------------------------------------------------------
+09/11/20|improve UI and recommendation system|
+in week 8, we have almost finished making feature of out movie finder web application.
+We presented demo in this week lab and I feel we have implemented better demo compared to last time
+since we already made UI much clearer and almost implemented many feature.
+Seems rating has some trouble with their structure how to store data but Luyuan did a great job for this
+so already solved . I also worked into improvement of recommendation system so
+made user based system and mix with genres, casts, directors which user can choose from tab.
+For casts, first I tried to use similarity as same as genres but casts has too many person name so
+I found that count vector is not working well for this category .
+Therefore I used default dictionary to store the number of same cast for each movie,
+as a result it worked well compared to using similarity so I chose this method for cast recommendation.
+-------------------------------------------------------------
+16/11/20|Debug and fix bug and write report|
+in week 9, we decided to focus on writing a final report and fixing some small bug in code since
+submit due day is Next Monday. We found that all directors page is a little messy so
+I implemented to make line to separate all directors name into section of each first alphabet of name.
+For report , I'm charge of writing description of challenge or trick data structure part
+so I just looked up my code ( recommendation part ) and average rating calculation part then
+wrote description of these components.
+-------------------------------------------------------------
+20/11/20|Final Diary|
+in week10, finally we finish our project and we have done the final presentation.
+Before that, we all implemented practice for final demo on Tuesday and Thursday morning.
+I think all of us did a great job and feel I could learn some skills to make web application
+especially in the part how to connect frontend and backend.
+Thank you for all member for this projects.
