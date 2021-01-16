@@ -1,0 +1,55 @@
+git clone https://github.com/raymzag/comp9315.git
+git status
+vim .gitignore 
+git add .
+git commit -m 'change complex to email name in source file'
+g
+
+git checkout (only new branch -b) yuta
+git checkout master
+git diff
+git log
+git pull origin master
+
+cd /Users/yuta/Documents/Australia_doc/UNSW/Lesson/Comp9315/source 
+git clone https://github.com/postgres/postgres.git
+git checkout yuta(master)
+git add .
+git commit -m 'change complex to email name in source file'
+
+#override
+git push -f origin master
+
+git log
+...check history
+
+git reset --hard origin/master
+git log
+git diff HEAD^ HEAD
+
+git pull --rebase origin master
+
+
+after you change,
+in your branch
+git pull origin master
+you need git add . to your
+git commit git push
+then
+checkout master
+git pull origin master
+then git pull origin yuta
+then push 
+
+no necessary push want to return file
+git checkout FilmFinder/db.sqlite3
+
+force over ride technique
+1.git reset --hard origin/master
+2.git push -f origin yuta
+
+revert commit (delete commit range)
+git revert commit1 ID
+
+revert commit (delete commit range)
+git revert commit1 ID..commit2 ID

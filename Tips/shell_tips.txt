@@ -1,0 +1,129 @@
+
+basic
+common_name=$(egrep "COMP(2041|9041)" $filename|cut -d '|' -f3|cut -    d ' ' -f2|sort|uniq -c|sort|tail -n 1|sed 's/^ *//'|cut -d ' ' -f2)
+
+ew_filename=$(echo $filename|sed 's/.htm/.html/')
+
+lastchar=$(echo $filename|rev|cut -d '.' -f 1|rev)
+
+string concatnation new="{old}string"
+
+grep is for catch some words in file
+grep 'words' filename
+
+[a-zA-Z] [aeiou]
+[^a-e] ... except  
+e.g. 
+egrep ^[^#] ... get all except preprocessior commands
+egrep :[^:]+: ... get :password:
+egrep -v '^ *1'  ... get such as space     [23456789](except 1)
+^ * means start from more than 0 space
+
+begin and end of vowel
+^[aeiou].*[aeiou]$
+
+\s$ ... trailing white space
+
+pattern * ... 0 or more
+pattern + ... 1 or more
+pattern ? ... 0 or 1
+pattern  . ... matchs any single character  e.g. egrep -v .  ... grep every empty lines(same as perl)
+
+.* ... can used as and
+| ... can used as or
+
+cut -d ' ' (separete condition) -f3 (field you want)
+
+comp[29]04[14] ... 4 sets
+comp(2041|9044) ... 2 sets  e.g. egrep '129\.94\.172\.([1-9]|1[0-9]|2[0-5])$' ips.txt  ... get IP address from 129.94.172.1 to 129.94.172.25
+e.g.  ^[0-9]+(\.[0-9]*)? ... ger such as 3.141 ...(text) , 90.57 ... 
+
+sed 's/unix/linux/' geekfile.txt
+sed 's/^ *//'  ... remove space
+sed 's/ /\n/g' ... only linux show each line by space, 
+g is for every space (I is ignore case) -----> "abc" -> abc if no g "abc
+sed 's/^0*\([1-9]\)/\1/' .... 0->0  00003333 -> 3333
+sed -E (using regx) 's/[0-9]{2}://'  ... {2} is 2 times
+
+
+tr ' ' '\n' ... for mac show each line by space
+uniq -c ... count for each unique
+head -n 2 ... take 2 row
+tail +5
+sort -r (reverse)
+
+| sort | uniq -c ... to get unique count
+
+'^COMP(2041|9044)'
+
+really be careful a=b not a = b, a = $(()) must be a=$(()):
+
+check integer
+re='^[0-9]+$'
+
+() ...run the command between here
+(()) ...run the arithmetic between here
+
+>/dev/null ... output go to black hole
+
+$@.sh to use catch every sh file
+
+sort by field ... sort (--debug) -k2 or -k2b(field)   for reverse sort -k2r
+
+if $((num%2 == 0 ))
+[ $(( num % 2 )) -eq 0]
+
+echo "$1" | egrep -q '[^[:digit:]]'
+then
+	echo "invalid"
+fi
+
+yuta$ file * | egrep executable | sed 's/:.*//' ... show every executable files
+
+seq command line loop handy !
+A |xargs command ... refer A, then implement command such as touch( make empty file )
+
+mv ... rename better than cp and rm
+
+
+test -e filename filename exist or not
+
+put ls in variable
+thefile=$(ls -t -U | grep -m 1 "Screen Shot")
+
+top ... show cpu
+
+if [[ $n =~ pattern (put space absolutely)       ]] ... [[]] this is for regular expression
+
+echo "text `command` text"
+
+i=`expr $i + $increment`
+or u can use both expr or $(())
+i=$(($i + $increment)) is calculation
+
+bytes=`wc -c <"$f"` .... put command output in variable is `` 
+
+variable=$() is command 
+
+if egrep -iw  ...-iw is ignore case sensitivity and white space
+
+.......arithmatic loop and create file...................
+for ((i=$begin;i<=end;i++))
+do
+	echo $i
+done >$filename
+....................................................................
+
+if with numerical if compare
+if (($size >= $c_size))
+cut multiple spaces (tr + cut)
+ls -l $file | tr -s ' '| cut -d ' ' -f5
+
+for cut syntax u need \ as well
+ cut -d \" -f1 ..... cut by "
+ 
+ get size of file
+ bytes=`wc -c <"$filename"`
+ 
+ curl -s "$@" # fetch the web page
+ 

@@ -1,0 +1,73 @@
+C++ 
+
+member func using variable.func()
+otherwise to accsess member variavle (private variabel)
+use friend
+
+explicit for prevention implicit change from 1 argument(input) to output for constrcutor
+turn off 1 constrcutor for another type of input
+
+for (auto &a: collection)
+
+auto const usable_data = std::span<int>(raw_data.get(), 42);
+T*
+size
+begin() / end()
+for (data: usable_data)
+
+1) use gsl_list::narrow_cast instead of static_cast
+use size_t instead of unsigned long
+for i in range(20):
+for(int i 0; i< 20; i++)
+for (auto i : ranges:iota(0, 20))
+
+0..size_
+iota instead
+ :
+begin()/end()
+can be used for(auto &i: container)
+span / begin/end
+for( ;; )
+
+Generics is the idea to allow type (Integer, String, … etc and user-defined types) to be a parameter to methods, classes and interfaces. -> using template
+
+ass3 how store value
+
+
+ranges::for_each(graph_, [&v](auto const& n){ 
+						v.push_back(n.first->getval()) 
+					})
+					
+					
+constexpr run in compile time
+
+the specidied comparater does not provide a viable --> your compater is wrong
+
+Template definitions must be in the .h file because files using templates must be able to generate the code at compile time (as opposed to link time)
+
+no viable overload operator  -> u need to use first or second
+
+namespace comp6771{
+	class exam {
+	public:
+		
+	private:
+		// noraml value
+		int size_;
+		std::unique_ptr<double[]>magnitudes_ or struct (node, edge)
+	}
+}
+
+fill ... ranges::fill(magnitudes_.get(), magnitudes_.pointer.get() + size, value)
+[] operator need normal and const
+
+graph(graph&& other) noexcept {
+	this->graph_ = std::move(other.graph_);
+}
+
+comparator for pinter value in container
+strcut node_comp {
+	using is_transparent = void;
+	auto operator()(const std::shared_pointer<node>& lhs, const std::shared_pointer<node>& rhs) const -> bool {
+		return *lhs < *rhs;	
+	}

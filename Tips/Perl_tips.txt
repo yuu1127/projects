@@ -1,0 +1,244 @@
+=~ s/[aeiou]//gi;  ... filter vowel words
+*           Match 0 or more times
++           Match 1 or more times
+?           Match 1 or 0 times (same as shell)
+
+== ... this is for numeric
+eq ... this is for string
+
+basic loop for hash
+foreach $key (sort(keys %prices))
+{
+    $value = $prices{$key};
+}
+
+
+file operation
+
+@ARGV ... argv length
+
+$n = <STDIN>
+if(!defined $n){
+	#last is break
+	last;
+ }
+ 
+ This is set 
+ open my $in, '<', $infile or
+ 	die "$0: open of $infile failed: $!\n";
+ close $in;
+ 
+ while($line = <STDIN>){
+ 	process for each srdin loop
+ }
+ 
+ $string = $string . $string; ... string concatnation
+ 
+ $#lines is length of array lines for loop
+for ($i = $#lines; $i >=0; $i--){
+	print $lines[$i];
+ }
+ 
+ regx (for tr)
+ $text =~ tr/[0-4]/</;
+ 
+ 
+if( $ARGV[0] !~ /^[0-9]+$/)
+ 
+ take every arguments
+while ($line = <>){
+	print $line;
+ }
+ 
+ --------head.pl.................. beautiful code
+ $n_lines = 10;
+  if(@ARGV && $ARGV[0] =~ /-[0-9]+/) {
+  	$n_lines = shift @ARGV;
+  	$n_lines =~ s/-//;
+ }
+@lines = <STDIN>;
+print @lines[0..$n_lines-1];
+ -------------------------------------
+ 
+devowel
+$line =~ s/[aeiou]//gi;
+
+# 1) perl array size with implicit scalar conversion:
+$size1 = @foods;
+# 2) perl array size with explicit scalar conversion:
+$size2 = scalar @foods;
+# 3) perl array size with using the index of the last 
+#    element in the array, plus one:
+$size3 = $#foods + 1;
+
+array
+----------------------------------------------------
+$marks = "99, 67, 85, 48, 77, 84";
+@listofmarks = split(/,/, $marks);
+
+$sum = 0;
+foreach $m (@listofmarks){
+    $sum += $m;
+}
+$newmarks = join(':', @listofmarks);
+
+print "sum is $sum\n";
+print "new strings is $newmarks\n";
+
+@ans = split(/[#@]+/, 'ab##@#c#d@@e');
+print "ans is @ans\n";
+
+# if regexp is parenthesised , the corresponding part is retained
+@ans1 = split(/([#@]+)/, 'ab##@#c#d@@e');
+print "ans1 is @ans1\n";
+
+$string_ = "abcde";
+@array_ = split(//, $string_);
+print "$string_ can become @array_\n";;
+ ----------------------------------------------------
+ 
+ split pattern so need to / for special simbol
+ @file_array = split(/\./, $filename);
+ 
+ week7
+ %days ... key and value
+$line =~ /(\w{8})\s+(.*)/ or die "help" ......  word * 8
+split(/\|/, $a) .... split by |
+ 
+ 
+ for perl ,
+  `next' is equivalent to `continue'; 
+  `last' is equivalent to `break'.
+  ---------------------------------------------------
+ remember using d and D s and S w and W
+ $num = $words[0] =~ s/\D//gr;
+ $num = $words[0] =~ s/\d//gr;
+\w       [3]  Match a "word" character (alphanumeric plus "_", plus
+                                      other connector punctuation chars plus Unicode
+                                      marks)
+\W       [3]  Match a non-"word" character
+\s        [3]  Match a whitespace character
+\S        [3]  Match a non-whitespace character
+\d        [3]  Match a decimal digit character
+\D        [3]  Match a non-digit character
+ ---------------------------------------------------
+ 
+$regex = shift @ARGV;
+$filenames = <>; ... get rest of arguments
+ ---------------------------------------------------
+sort by keys
+sort keys %hash;
+foreach $k (sort keys %tab)
+sort by values
+@words = keys %count;
+@sorted_words = sort {$count{$a} <=> $count{$b}} @words; ... sort by hash %count
+@sorted = sort { length $a <=> length $b } @lines;
+@sorted = sort {$a <=> $b} (@numbers) (sort by number)
+
+@hi = split //,"hello";
+
+@lines = <STDIN>;
+----------------------------------------------------
+# pass by reference
+sub dot_product{
+    my ($a, $b) = @_;
+    my @c;
+    foreach $i (0..$#$a){
+        # if reference need $ to access
+        $c[$i] = $$a[$i] * $$b[$i];
+    }
+    return @c;
+}
+@a = (1..5);
+@b = (2..6);
+@product = dot_product \@a, \@b;
+
+sub my_push1 {
+    my ($array_ref,@elements) = @_;
+    # caz $array_ref is reference need @ for array access
+    @$array_ref = (@$array_ref, @elements);
+
+    #return $#$array_ref + 1;
+}
+@a = (1..5);
+my_push1 \@a, 10..15;
+------------------------------------------
+
+foreach my $course ($web_page =~ /($prefix[0-9][0-9][0-9][0-9].*)/g){
+    #$tag =~ /<\/?(\w+)/;
+    print "$course\n";
+}
+
+-------------------------------------------
+write in file
+open my $F, '>', $filename or
+	die "$0: open of $filename failed: $!\n";
+    foreach $line(@lines){
+        $line =~ s/[0-9]/#/gi;
+        print $F "$line";
+    }
+close $F;
+
+grep / / <----- necessary 
+
+----------------------------------------
+while ($line = <STDIN>) {
+    if($line =~ /(\S+)\s+(\S+)\s+(\d+)/){
+        $distance{$1}{$2} = $3;
+        $distance{$2}{$1} = $3;
+    }
+    else{
+        next;
+    }
+}
+
+$1 $2 means () () for last process
+same as
+
+while (<STDIN>) {
+    /(\S+)\s+(\S+)\s+(\d+)/ || next;
+    $distance{$1}{$2} = $3;
+    $distance{$2}{$1} = $3;
+}
+
+upper to low
+$line =~ tr/A-Z/a-z/;
+
+get the length of key array
+$num = keys $hash;
+
+use List::MoreUtils qw(uniq);
+u can use uniq then
+
+useful to find count word and search unique word
+if(!$seen{$element}){
+    $seen{$element}++;
+}
+
+.......take numbers 0.01 from string......
+# (?: is Prevent the grouping metacharacters () from capturing)
+@nums = $line =~ /\-?(?:\d+\.?\d*)/g;
+
+.....useful syntax.....
+foreach $word (@ARGV){
+}
+@lines = <STDIN>;
+open my $F, '<', $filename or
+	die "$0: open of $filename failed: $!\n";
+    @lines = <$F>;
+close $F;
+
+print @lines[0..$n_lines-1]; or foreach print
+
+round number ... 1.5 -> 2 , 1.3 -> 1
+my @numbers = $line =~ /(\d+\.\d+)/g;
+    foreach $number (@numbers) {
+        my $rounded_number = int($number + 0.5);
+        $line =~ s/$number/$rounded_number/;
+    }
+    
+./total_words.pl <lyrics/Justin_Bieber.txt
+@lines = <>;
+
+$date = `date`;
+@s_lines = split(/[^a-zA-Z]/, $line); ..... except a-z words split

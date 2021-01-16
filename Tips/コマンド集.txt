@@ -1,0 +1,26 @@
+tar -cvf Lab2.tar Lab2.pdf PingClient.py
+ssh username@grieg.cse.unsw.edu.au
+
+sftp usrname@login.cse.unsw.edu.au:/import/ravel/4/username
+put schema1.sql
+put -r .
+get schema1.sql
+lcd
+
+lpwd
+
+\d people
+
+:syntax on
+:set number
+
+vim
+
+shift + g 一番下にジャンプ
+gg	一番上にジャンプ
+0	カーソル位置の行頭へ移動
+$	カーソル位置の行末へ移動
+
+linux
+nc- nvlp 8000
+

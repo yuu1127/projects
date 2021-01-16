@@ -1,0 +1,10 @@
+cxx_library(
+	TARGET word_ladder
+	FILENAME word_ladder.cpp
+	LINK range-v3 absl::flat_hash_set
+)
+cxx_executable
+CMakeLists.txt
+cmake: Set Build Target
+gc++ or clang++
+-I include files  -L library files
