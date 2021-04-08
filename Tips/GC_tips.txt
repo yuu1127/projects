@@ -1,0 +1,39 @@
+https://stackoverflow.com/questions/63505670/apache-cant-connect-to-new-tomcat-9-ajp
+によると
+現在tomcatはAJP portはデフォルトでは
+localhostのみのリクエストを受け入れている。
+これを消してsecretRequiredプロパティを追加することで
+AJP portを通してsecret keywordを持つworkerからのリクエストのみ
+http応答ができる様になる
+
+OutOfMemoryErrorでJavaプログラムの実行を停止する
+結果的にJVMのGCで何が嬉しいか？
+プログラムコードを書く際にC言語などの様にメモリ領域の割り当てや
+開放（free()など), を自動的に行なってくれる
+ただ欠点としてはGCが実行している間、JVM関連での他のスレッドの実行が停止してしまう
+https://www.atmarkit.co.jp/ait/articles/0502/25/news123.html
+
+Heap設定
+Xmn size
+... New世代の領域サイズ
+初期と最大のどちらのサイズも指定できるが
+-XX:NewSize ... 初期サイズのみ指定
+-XX:MaxNewSize ... 最大サイズのみ指定
+例:
+-Xmn256m
+-Xmn262144k
+-Xmn268435456
+
+Xms size
+... 初期ヒープサイズ（全体）
+Xmx size
+... 最大ヒープサイズ（全体）
+
+-XX:NewRatio ... New世代とOld世代の比率
+デフォルトで2 (Newに比べてOldが２倍)
+-XX:SurvivorRatio ... EdenとSurvivorの比率
+デフォルトで8
+GC設定
+
+メモ
+newだったりyoungだったり色々な言葉で表現されていた
